@@ -1,0 +1,18 @@
+#board {
+    display: grid;
+    grid-template-columns: repeat(8, 80px);
+    grid-template-rows: repeat(8, 80px);
+}
+
+#board button {
+    width: 80px;
+    height: 80px;
+}
+
+.white-square {
+    background-color: #f0d9b5;
+}
+
+.black-square {
+    background-color: #b58863;;
+}
