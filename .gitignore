@@ -1,0 +1,7 @@
+target/
+*.ilk
+*.obj
+*.pdb
+*.exe
+.vscode/
+*.class
