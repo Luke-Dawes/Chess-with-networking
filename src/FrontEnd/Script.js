@@ -39,7 +39,16 @@ for (let y = 7; y >= 0; y--) {
         }
 
         button.addEventListener("click", () => {
-        console.log(button.dataset.square);
+            console.log(button.dataset.square);
+
+            const message = {
+                type: "ASK_FOR_POSSIBLE_MOVES",
+                data: button.dataset.square
+            }
+
+            if (socket.OPEN()) {
+                socket.send(JSON.stringify(message));
+            }
         });
 
         const piece = boardPosition[button.dataset.square];
