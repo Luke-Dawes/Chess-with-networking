@@ -1,3 +1,4 @@
+#pragma once
 #include "Helper.h"
 
 class AttackGen {
@@ -10,8 +11,8 @@ class AttackGen {
 
     static Bitboard pawnAttacks(Square square, Colour colour);
     static Bitboard knightAttacks(Square square);
-    static Bitboard bishopAttacks(Square square, Bitboard occupied);
-    static Bitboard rookAttacks(Square square, Bitboard occupied);
-    static Bitboard queenAttacks(Square square, Bitboard occupied);
+    static Bitboard bishopAttacks(Square square, Bitboard& occupied);
+    static Bitboard rookAttacks(Square square, Bitboard& occupied);
+    static Bitboard queenAttacks(Square square, Bitboard& occupied);
     static Bitboard kingAttacks(Square square);
 };
