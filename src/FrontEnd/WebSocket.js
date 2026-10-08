@@ -1,29 +1,14 @@
-const socket = new WebSocket("ws://localhost:9000")
+const { WebSocketServer } = require("ws");
 
-socket.onopen = () => {
-    // const message = {
-    //     type: "ASK_FOR_POSSIBLE_MOVES",
-    //     data: "e2"
-    // };
-    //socket.send(JSON.stringify(message));
+const wss = new WebSocketServer({port: 9000})
 
-    console.log("connected to java");
+wss.on("connection", (socket) => {
+    console.log("browser connected")
 
-}
+    socket.on("message", (data) => {
+        console.log("got:", data.toString());
+        socket.send("echo: " + data.toString());
+    });
+}); 
 
-socket.onmessage = (event) => {
-    //const message = JSON.parse(event.data);
-
-    //console.log(message.type);
-    //console.log(message.data);
-
-    console.log("Java:" + event.data);
-}
-
-socket.onclose = () => {
-    console.log("disconnected from Java");
-}
-
-socket.onerror = (error) => {
-    console.log("websocket error ", error);
-}
+console.log("listening on ws://localhost:9000");

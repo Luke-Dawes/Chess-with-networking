@@ -1,5 +1,3 @@
-js -> java websocket
-
-java -> c++ tcp connection
+js -> c++ some sort of connection
 
 NNUE-style networks

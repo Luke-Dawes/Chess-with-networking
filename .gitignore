@@ -5,3 +5,5 @@ target/
 *.exe
 .vscode/
 *.class
+*.json
+node_modules/

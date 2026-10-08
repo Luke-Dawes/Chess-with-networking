@@ -1,3 +1,6 @@
+const socket = new WebSocket("ws://localhost:9000");
+
+
 const board = document.getElementById("board");
 const files = ["a", "b", "c", "d", "e", "f", "g", "h"];
 
@@ -46,8 +49,8 @@ for (let y = 7; y >= 0; y--) {
                 data: button.dataset.square
             }
 
-            if (socket.OPEN()) {
-                socket.send(JSON.stringify(message));
+            if (socket.readyState == WebSocket.OPEN) {
+                socket.send(JSON.stringify(message))
             }
         });
 
