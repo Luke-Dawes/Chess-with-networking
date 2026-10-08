@@ -1,59 +1,52 @@
 #include "AttackGen.h"
+#include "LookupTables.h"
+#include "Helper.h"
 
+// Bitboard pawnAttacks(Square square, Colour colour) {
+//     return pawnTable[colour][(uint8_t)square];
+// }
 
+// Bitboard kingAttacks(Square square) {
+//     return kingTable[(uint8_t)square];
+// }
 
-Bitboard AttackGen::kingAttacks(Square square) {
-    constexpr int possible_Moves[8] = {+1, -1, +7, +8 ,+9, -7, -8, -9};
+// Bitboard rookAttacks(Square square,  Bitboard occupied) {
+//     return rookTable[(uint8_t)square][_pext_u64(occupied, rookMask[(uint8_t)square])];
+// }
 
-    Bitboard potentialMoves = 0ULL;
+// Bitboard bishopAttacks(Square square, Bitboard occupied) {
+//     return bishopTable[(uint8_t)square][_pext_u64(occupied, bishopMask[(uint8_t)square])];
+// }
 
-    for (const auto& move : possible_Moves) {
+// Bitboard queenAttacks(Square square, Bitboard occupied) {
+//     return rookAttacks(square, occupied) | bishopAttacks(square, occupied);
+// }
 
-        Square newSqure = static_cast<Square>(static_cast<uint8_t>(square) + static_cast<uint8_t>(move));
+// Bitboard knightAttacks(Square square) {
+//     return knightTable[(uint8_t)square];
+// }
 
-        if (!is_valid_square(newSqure) || !valid_distance_check(square, newSqure, Piece::KING)) continue;
-
-        potentialMoves |= square_to_BB(newSqure);
-    }
-    return potentialMoves;
+//int versions
+Bitboard kingAttacks(int square) {
+    return kingTable[(uint8_t)square];
 }
 
-Bitboard AttackGen::rookAttacks(Square square, Bitboard& occupied) {
-    constexpr int possibleMoves[4] = {+1, -1, +8, -8};
-
-    Bitboard potentialMoves = 0ULL;
-    Square NewSquare;
-
-    for (const auto& move : possibleMoves) {
-
-        NewSquare = static_cast<Square>(static_cast<uint8_t>(square) + move);
-
-        while (is_valid_square(NewSquare)) {
-
-            if (is_square_occupied(NewSquare, occupied) || !valid_distance_check(square, NewSquare, Piece::ROOK)) break;
-
-            potentialMoves |= square_to_BB(NewSquare);
-            
-            NewSquare = static_cast<Square>(static_cast<uint8_t>(NewSquare) + move);
-        }
-
-    }
-    return potentialMoves;
+Bitboard rookAttacks(int square,  Bitboard occupied) {
+    return rookTable[(uint8_t)square][_pext_u64(occupied, rookMask[(uint8_t)square])];
 }
 
-Bitboard AttackGen::knightAttacks(Square square) {
-    constexpr int possibleMoves[8] = {+17, +15, +10, +6, -6,  -10, -15, -17};
+Bitboard bishopAttacks(int square, Bitboard occupied) {
+    return bishopTable[(uint8_t)square][_pext_u64(occupied, bishopMask[(uint8_t)square])];
+}
 
-    Bitboard potentialMoves = 0ULL;
-    
-    for (const auto& move : possibleMoves) {
+Bitboard queenAttacks(int square, Bitboard occupied) {
+    return rookAttacks(square, occupied) | bishopAttacks(square, occupied);
+}
 
-        Square newSquare = static_cast<Square>(static_cast<uint8_t>(square) + move);
+Bitboard knightAttacks(int square) {
+    return knightTable[(uint8_t)square];
+}
 
-        if (!is_valid_square(newSquare) || !valid_distance_check(square, newSquare, Piece::KNIGHT)) continue;
-
-        potentialMoves |= square_to_BB(newSquare);
-    }
-
-    return potentialMoves;
+Bitboard pawnAttacks(int square, Colour colour) {
+    return pawnTable[colour][(uint8_t)square];
 }
