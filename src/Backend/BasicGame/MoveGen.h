@@ -5,6 +5,7 @@
 #include "Helper.h"
 #include "MoveGen.h"
 #include "AttackGen.h"
+#include "zobhrist.h"
 #include <stdexcept>
 
 enum PieceType {PAWN, KNIGHT, BISHOP, ROOK, QUEEN, KING, NO_PIECE};
@@ -80,6 +81,8 @@ struct Position
     Bitboard all = 0; //every piece on the board - refreshed when used
     int side = WHITE;
 
+    uint64_t hash = 0;
+
     /*
         castling rights as bits 
             1 white king side
@@ -116,6 +119,32 @@ inline int popLsb(Bitboard& b) {
      return s; 
 }
 
+inline uint64_t computeHash(const Position& pos) {
+
+    uint64_t hash = 0;
+
+    for (int colour = 0; colour < 2; colour++) {
+        for (int piece = 0; piece < 6; piece++) {
+
+            uint64_t bb = pos.pieces[colour][piece];
+
+            while (bb) {
+                int sq = popLsb(bb);
+                hash ^= zobrist.pieces[colour][piece][sq];
+            }
+
+
+        }
+    }
+
+    if (pos.side == BLACK) hash ^= zobrist.sideToMove;
+    hash ^= zobrist.castling[pos.castling];
+    if (pos.ep != -1) hash ^= zobrist.enPassent[pos.ep & 7];
+
+    return hash;
+
+}
+
 //starting positions
 inline Position startPosition() {
     Position p;
@@ -133,6 +162,7 @@ inline Position startPosition() {
     p.pieces[BLACK][KING]   = 0x1000000000000000ULL;
     p.castling = 15;
     p.refresh();
+    p.hash = computeHash(p);
     return p;
 }
 
@@ -375,6 +405,9 @@ inline void makeMove(Position& p, Move m ) {
     p.ep = (flags == DOUBLE_PUSH) ? (from + to) / 2 : -1;
     p.side = them;
     p.refresh();
+
+    p.hash = computeHash(p);
+
 }
  
 //legal moves, generate all possible moves, and then if the king is in check in the new move drop it

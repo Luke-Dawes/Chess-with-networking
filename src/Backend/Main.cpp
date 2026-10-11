@@ -3,6 +3,7 @@
 #include "basicGame/Helper.h"
 #include "BasicGame/AttackGen.h"
 #include "BasicGame/MoveGen.h"
+#include "BasicGame/zobhrist.h"
 
 
 int main() {
