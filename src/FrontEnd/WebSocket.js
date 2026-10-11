@@ -2,8 +2,8 @@ const { WebSocketServer } = require("ws");
 
 const wss = new WebSocketServer({
     host: "127.0.0.1",
-    port: 9000,
-    verifyClient: ({ origin }) => !origin || origin.startsWith("http://localhost"),
+    port: 8081,
+    //verifyClient: ({ origin }) => !origin || origin.startsWith("http://localhost"),
 });
 
 wss.on("connection", (socket) => {
@@ -15,4 +15,4 @@ wss.on("connection", (socket) => {
     });
 }); 
 
-console.log("listening on ws://localhost:9000");
+console.log("listening on ws://localhost:8081");
